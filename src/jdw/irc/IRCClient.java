@@ -259,6 +259,14 @@ public class IRCClient implements Observer {
 		return VERSION_NAME + " " + VERSION + " by " + CREATOR;
 	}
 	
+	public String getHost() {
+		return connection.getHost();
+	}
+	
+	public int getPort() {
+		return connection.getPort();
+	}
+	
 	public synchronized boolean auth(String user, String password) {
 		if (user == null || user.isEmpty()
 				|| password == null || password.isEmpty())
