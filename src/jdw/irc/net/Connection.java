@@ -14,6 +14,8 @@ public class Connection extends Observable {
 	private final String host;
 	private final int port;
 	
+	private EncryptionMethod encryption;
+	
 	private Socket socket;
 	
 	private BufferedWriter output;
@@ -21,10 +23,11 @@ public class Connection extends Observable {
 	
 	private Listener listener;
 	
-	public Connection(String host, int port) throws IOException {				
+	public Connection(String host, int port, EncryptionMethod encryption) throws IOException {				
 		this.host = host;
 		this.port = port;
 		
+		this.encryption = encryption;
 		this.socket = null;
 		this.input = null;
 		this.output = null;
@@ -34,14 +37,22 @@ public class Connection extends Observable {
 	}	
 		
 	public static Connection connect(String host, int port) throws UnknownHostException, IOException {
-		return new Connection(host, port);
+		return new Connection(host, port, EncryptionMethod.NONE);
 	}
 	
 	public void connect() throws UnknownHostException, IOException {
 		if (socket != null)
 			return;
-		
-		socket = new Socket(getHost(), getPort());
+				
+		switch (encryption) {
+			case NONE:
+				socket = new Socket(getHost(), getPort());
+				break;
+			case SSL:
+				throw new UnsupportedOperationException();
+			default:
+				throw new IllegalArgumentException("Unsupported Encryption!");
+		}
 		output = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream(), "UTF-8"));
 		input = new BufferedReader(new InputStreamReader(socket.getInputStream(), "UTF-8"));
 		
