@@ -32,6 +32,12 @@ import jdw.irc.net.command.irc.PrivateMessageExecutor;
 import jdw.irc.net.command.irc.QuitExecutor;
 import jdw.irc.net.command.irc.ResponseManager;
 
+/**
+ * 
+ * 
+ * @author Daniel
+ *
+ */
 public class IRCClient implements Observer {
 	public static final String VERSION_NAME = "AtomIRC-Core";
 	public static final String VERSION = "0.3.2";
@@ -255,18 +261,36 @@ public class IRCClient implements Observer {
 		me = getUserManager().getUserFromString(nick);
 	}
 	
+	/**
+	 * @return Returns the Version-Name, the Version and the creator.
+	 */
 	public static String getAboutString() {
 		return VERSION_NAME + " " + VERSION + " by " + CREATOR;
 	}
 	
+	/**
+	 * @return The host you are connected to.
+	 */
 	public String getHost() {
 		return connection.getHost();
 	}
 	
+	/**
+	 * @return The Port you are connected to.
+	 */
 	public int getPort() {
 		return connection.getPort();
 	}
 	
+	/**
+	 * Sends the "AUTH" Command.
+	 * This should verfify a user for the server.
+	 * It won't be send if one ore both arguments are empty or null.
+	 * 
+	 * @param user The User.
+	 * @param password The Password.
+	 * @return true if it was send, false otherwise.
+	 */
 	public synchronized boolean auth(String user, String password) {
 		if (user == null || user.isEmpty()
 				|| password == null || password.isEmpty())
@@ -275,6 +299,13 @@ public class IRCClient implements Observer {
 		return sendObject("AUTH " + user + " " + password);
 	}
 	
+	/**
+	 * Sends a message in a specified channel.
+	 * 
+	 * @param channel The channel.
+	 * @param message The message.
+	 * @return true if it was send, false otherwise.
+	 */
 	public synchronized boolean sendMessage(IRCChannel channel, String message) {
 		if (message == null || channel == null 
 				|| message.isEmpty() || channel.getName().isEmpty())
