@@ -10,6 +10,8 @@ import java.net.UnknownHostException;
 import java.util.Observable;
 import java.util.logging.Logger;
 
+import javax.net.ssl.SSLSocketFactory;
+
 public class Connection extends Observable {	
 	private final String host;
 	private final int port;
@@ -49,7 +51,8 @@ public class Connection extends Observable {
 				socket = new Socket(getHost(), getPort());
 				break;
 			case SSL:
-				throw new UnsupportedOperationException();
+				socket = SSLSocketFactory.getDefault().createSocket(getHost(), getPort());
+				break;
 			default:
 				throw new IllegalArgumentException("Unsupported Encryption!");
 		}
