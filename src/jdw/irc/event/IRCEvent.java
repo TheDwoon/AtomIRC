@@ -1,5 +1,6 @@
 package jdw.irc.event;
 
+import jdw.event.Event;
 import jdw.irc.IRCClient;
 
 /**
@@ -8,7 +9,7 @@ import jdw.irc.IRCClient;
  * @author Daniel
  *
  */
-public abstract class IRCEvent {
+public abstract class IRCEvent implements Event {
 	private final IRCClient source;
 	
 	public IRCEvent(IRCClient source) {

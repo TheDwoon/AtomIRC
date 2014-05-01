@@ -17,6 +17,6 @@ public class DefaultResponseExecutor implements ResponseExecutor {
 		Log.notNull(null, "No executor set for: " + r.getCommand() + " " + Log.dumpInformation(this, r));
 		
 		UnknownCommandEvent event = new UnknownCommandEvent(client, r);
-		client.getEventFactory().raiseUnknownCommandEvent(event);
+		client.getEventSystem().dispatchEvent(event);
 	}
 }

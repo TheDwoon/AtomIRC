@@ -21,7 +21,7 @@ public class CVersionExecutor implements ResponseExecutor {
 		assert user != null;
 		
 		CTCPEvent event = new CTCPEvent(client, CTCPEventType.VERSION, user, "");
-		client.getEventFactory().raiseCTCPEvent(event);		
+		client.getEventSystem().dispatchEvent(event);		
 		
 		client.notice(user, "\001VERSION " + IRCClient.getAboutString() + " " + event.getResponse() + "\001");
 	}

@@ -19,7 +19,7 @@ public class PingExecutor implements ResponseExecutor {
 		Log.notNull(message, "Message was null! " + Log.dumpInformation(this, r));
 		
 		PingEvent event = new PingEvent(client, message);
-		client.getEventFactory().raisePingEvent(event);
+		client.getEventSystem().dispatchEvent(event);
 		
 		client.sendPong(r.getTrailing());
 	}

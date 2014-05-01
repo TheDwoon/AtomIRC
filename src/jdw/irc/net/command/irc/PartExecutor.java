@@ -25,6 +25,6 @@ public class PartExecutor implements ResponseExecutor {
 		channel.removeUser(user);
 		
 		UserPartEvent event = new UserPartEvent(client, user, channel);
-		client.getEventFactory().raiseUserPartEvent(event);
+		client.getEventSystem().dispatchEvent(event);
 	}
 }

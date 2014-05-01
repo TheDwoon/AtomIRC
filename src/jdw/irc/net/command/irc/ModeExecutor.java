@@ -42,6 +42,6 @@ public class ModeExecutor implements ResponseExecutor {
 		Log.notNull(mode, "Mode was null! " + Log.dumpInformation(this, r));
 		
 		ModeChangeEvent event = new ModeChangeEvent(client, sender, channel, user, mode);
-		client.getEventFactory().raiseModeChangeEvent(event);
+		client.getEventSystem().dispatchEvent(event);
 	}
 }

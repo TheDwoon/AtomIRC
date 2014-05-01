@@ -25,7 +25,7 @@ public class NumericExecutor implements ResponseExecutor {
 		String message = r.getTrailing();				
 		
 		NumericResponseEvent event = new NumericResponseEvent(client, id, args, message);
-		client.getEventFactory().raiseNumericResponseEvent(event);
+		client.getEventSystem().dispatchEvent(event);
 	}
 	
 	protected IRCClient getClient() {

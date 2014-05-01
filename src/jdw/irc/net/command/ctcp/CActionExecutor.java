@@ -28,6 +28,6 @@ public class CActionExecutor implements ResponseExecutor {
 		String message = builder.toString();
 		
 		MeEvent event = new MeEvent(client, user, message);
-		client.getEventFactory().raiseMeEvent(event);
+		client.getEventSystem().dispatchEvent(event);
 	}
 }

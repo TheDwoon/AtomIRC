@@ -24,6 +24,6 @@ public class QuitExecutor implements ResponseExecutor {
 		client.getChannelManager().removeUserFromAllChannels(user);
 		
 		UserQuitEvent event = new UserQuitEvent(client, user, message);
-		client.getEventFactory().raiseUserQuitEvent(event);
+		client.getEventSystem().dispatchEvent(event);
 	}
 }

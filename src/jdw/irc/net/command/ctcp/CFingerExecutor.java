@@ -21,7 +21,7 @@ public class CFingerExecutor implements ResponseExecutor {
 		assert user != null;
 		
 		CTCPEvent event = new CTCPEvent(client, CTCPEventType.FINGER, user, "Go search for it!");
-		client.getEventFactory().raiseCTCPEvent(event);
+		client.getEventSystem().dispatchEvent(event);
 		
 		if (!event.isCanceled())
 			client.notice(user, "\001FINGER " + event.getResponse() + "\001");

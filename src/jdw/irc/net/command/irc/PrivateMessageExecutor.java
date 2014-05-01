@@ -39,11 +39,11 @@ public class PrivateMessageExecutor implements ResponseExecutor {
 		} else {		
 			if (channel != null) {
 				MessageEvent event = new MessageEvent(client, channel, user, message);		
-				client.getEventFactory().raiseMessageEvent(event);
+				client.getEventSystem().dispatchEvent(event);
 			} else {
 				Log.notNull(channel, "Channel was null! " + Log.dumpInformation(this, r));
 				PrivateMessageEvent event = new PrivateMessageEvent(client, user, message);
-				client.getEventFactory().raisePrivateMessageEvent(event);
+				client.getEventSystem().dispatchEvent(event);
 			}
 		}
 	}

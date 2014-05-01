@@ -21,7 +21,7 @@ public class CPingExecutor implements ResponseExecutor {
 		assert user != null;
 		
 		CTCPEvent event = new CTCPEvent(client, CTCPEventType.PING, user, r.getArgs()[0]);
-		client.getEventFactory().raiseCTCPEvent(event);
+		client.getEventSystem().dispatchEvent(event);
 		
 		if (!event.isCanceled())
 			client.notice(user, "\001PING " + event.getResponse() + "\001");

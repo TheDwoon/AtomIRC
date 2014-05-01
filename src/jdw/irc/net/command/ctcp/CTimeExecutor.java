@@ -26,7 +26,7 @@ public class CTimeExecutor implements ResponseExecutor {
 		assert user != null;		
 				
 		CTCPEvent event = new CTCPEvent(client, CTCPEventType.TIME, user, formatter.format(Calendar.getInstance().getTime()));
-		client.getEventFactory().raiseCTCPEvent(event);
+		client.getEventSystem().dispatchEvent(event);
 		
 		if (!event.isCanceled())
 			client.notice(user, "\001TIME " + event.getResponse() + "\001");

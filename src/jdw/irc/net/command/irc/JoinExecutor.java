@@ -30,6 +30,6 @@ public class JoinExecutor implements ResponseExecutor {
 		Log.notNull(channel, "Channel was null! " + Log.dumpInformation(this, r));		
 		
 		UserJoinEvent event = new UserJoinEvent(client, user, channel);
-		client.getEventFactory().raiseUserJoinEvent(event);		
+		client.getEventSystem().dispatchEvent(event);		
 	}
 }

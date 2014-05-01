@@ -27,6 +27,6 @@ public class NickExecutor implements ResponseExecutor {
 		Log.notNull(oldNick, "OldNick was null! " + Log.dumpInformation(this, r));
 		
 		NickChangeEvent event = new NickChangeEvent(client, oldNick, user);
-		client.getEventFactory().raiseNickChangeEvent(event);
+		client.getEventSystem().dispatchEvent(event);
 	}
 }

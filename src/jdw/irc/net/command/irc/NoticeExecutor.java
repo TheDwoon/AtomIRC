@@ -22,6 +22,6 @@ public class NoticeExecutor implements ResponseExecutor {
 		Log.notNull(message, "Message was null! " + Log.dumpInformation(this, r));
 		
 		NoticeEvent event = new NoticeEvent(client, user, message);
-		client.getEventFactory().raiseNoticeEvent(event);
+		client.getEventSystem().dispatchEvent(event);
 	}
 }

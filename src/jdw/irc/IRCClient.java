@@ -10,8 +10,9 @@ import java.util.Observer;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
 
+import jdw.event.EventDispatcher;
+import jdw.event.SyncQueueEventDispatcher;
 import jdw.irc.event.ConnectionLostEvent;
-import jdw.irc.event.IRCEventFactory;
 import jdw.irc.net.Connection;
 import jdw.irc.net.Response;
 import jdw.irc.net.command.ctcp.CActionExecutor;
@@ -60,7 +61,7 @@ public class IRCClient implements Observer {
 	
 	private final Connection connection;
 	
-	private IRCEventFactory evtFactory;
+	private EventDispatcher evtDispatcher;
 	
 	private ResponseManager cmdMgr;	
 	private ResponseManager ctcpMgr;
@@ -73,7 +74,7 @@ public class IRCClient implements Observer {
 	private IRCClient(Connection connection) {
 		this.connection = connection;		
 		
-		this.evtFactory = new IRCEventFactory();
+		this.evtDispatcher = new SyncQueueEventDispatcher();
 		this.ctcpMgr = new ResponseManager();
 		this.cmdMgr = new ResponseManager();
 		this.channelMgr = new IRCChannelManager();
@@ -394,7 +395,7 @@ public class IRCClient implements Observer {
 				logger.info("Sending of \"" + o + "\" failed at attempt " + i + ". Caused by " + e);
 				ConnectionLostEvent event = new ConnectionLostEvent(this, (i < 3) ? true : false, i);
 				
-				getEventFactory().raiseConnectionLostEvent(event);
+				getEventSystem().dispatchEvent(event);
 				
 				if (event.shouldReconnect()) {
 					if (connection.isConnected()) {
@@ -458,8 +459,8 @@ public class IRCClient implements Observer {
 		return channelMgr;
 	}
 	
-	public IRCEventFactory getEventFactory() {
-		return evtFactory;
+	public EventDispatcher getEventSystem() {
+		return evtDispatcher;
 	}
 	
 	public ResponseManager getCommandManager() {
