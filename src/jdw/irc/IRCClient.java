@@ -75,6 +75,8 @@ public class IRCClient implements Observer {
 		this.connection = connection;		
 		
 		this.evtDispatcher = new SyncQueueEventDispatcher();
+		((SyncQueueEventDispatcher) this.evtDispatcher).start();
+		
 		this.ctcpMgr = new ResponseManager();
 		this.cmdMgr = new ResponseManager();
 		this.channelMgr = new IRCChannelManager();
