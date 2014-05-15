@@ -46,6 +46,6 @@ public class IRCChannel extends IRCUserCollection {
 	
 	@Override
 	public String toString() {
-		return "IRCChannel [name=" + name + ", users=" + users + "]";
+		return "IRCChannel [name=" + name + ", users=" + super.toString() + "]";
 	}
 }
