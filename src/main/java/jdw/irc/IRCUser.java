@@ -118,7 +118,7 @@ public class IRCUser {
 	}
 	
 	/**
-	 * @return True if the nick, user and host are set to not null and are not empty, false otherwise.
+	 * @return True if nick, user and host are not set to not null and are not empty, false otherwise.
 	 */
 	public boolean isComplete() {
 		return hasNick() && hasUser() && hasHost();
