@@ -3,7 +3,6 @@ package jdw.irc.net.command.irc;
 import jdw.irc.IRCChannel;
 import jdw.irc.IRCClient;
 import jdw.irc.IRCUser;
-import jdw.irc.Log;
 import jdw.irc.event.ModeChangeEvent;
 import jdw.irc.net.Response;
 
@@ -35,12 +34,7 @@ public class ModeExecutor implements ResponseExecutor {
 		default:			
 			break;
 		}
-		
-		Log.notNull(sender, "Sender was null! " + Log.dumpInformation(this, r));
-		Log.notNull(user, "User was null! " + Log.dumpInformation(this, r));
-		Log.notNull(channel, "Channel was null! " + Log.dumpInformation(this, r));
-		Log.notNull(mode, "Mode was null! " + Log.dumpInformation(this, r));
-		
+
 		ModeChangeEvent event = new ModeChangeEvent(client, sender, channel, user, mode);
 		client.getEventSystem().dispatchEvent(event);
 	}

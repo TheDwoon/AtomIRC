@@ -3,7 +3,6 @@ package jdw.irc.net.command.irc;
 import jdw.irc.IRCChannel;
 import jdw.irc.IRCClient;
 import jdw.irc.IRCUser;
-import jdw.irc.Log;
 import jdw.irc.event.MessageEvent;
 import jdw.irc.event.PrivateMessageEvent;
 import jdw.irc.net.Response;
@@ -21,9 +20,6 @@ public class PrivateMessageExecutor implements ResponseExecutor {
 		IRCChannel channel = client.getChannelManager().getChannelByName(r.getArgs()[0]);
 		String message = r.getTrailing();
 
-		Log.notNull(user, "User was null! " + Log.dumpInformation(this, r));		
-		Log.notNull(message, "Message was null! " + Log.dumpInformation(this, r));
-		
 		if (message.startsWith("\001")) {
 			message = message.replace("\001", "");
 			
@@ -41,7 +37,6 @@ public class PrivateMessageExecutor implements ResponseExecutor {
 				MessageEvent event = new MessageEvent(client, channel, user, message);		
 				client.getEventSystem().dispatchEvent(event);
 			} else {
-				Log.notNull(channel, "Channel was null! " + Log.dumpInformation(this, r));
 				PrivateMessageEvent event = new PrivateMessageEvent(client, user, message);
 				client.getEventSystem().dispatchEvent(event);
 			}
