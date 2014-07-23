@@ -7,7 +7,7 @@ package jdw.irc;
  *
  */
 public class IRCChannel extends IRCUserCollection {
-	private String name;	
+	private final String name;	
 	
 	/**
 	 * Creates a Channel.
@@ -23,15 +23,6 @@ public class IRCChannel extends IRCUserCollection {
 	 */
 	public String getName() {
 		return name;
-	}
-
-	/**
-	 * Changes the channels name.
-	 * 
-	 * @param name The new name.
-	 */
-	public void setName(String name) {
-		this.name = name;
 	}
 	
 	/**
