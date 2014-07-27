@@ -21,9 +21,9 @@ public class IRCUserCollection {
 	
 	/**
 	 * Searches for all users matching the given pattern.
-	 * It will match against "<nick>!<user>@<host>"
+	 * It will match against <br/> <code>"nick!user@host"</code>
 	 * 
-	 * @param regex A sarchpattern.
+	 * @param regex A search pattern.
 	 * @return A list of users matching the given pattern.
 	 */
 	public List<IRCUser> searchUsers(String regex) {
@@ -40,7 +40,7 @@ public class IRCUserCollection {
 	/**
 	 * Searches for all users and matches their nick with the given pattern.
 	 * 
-	 * @param regex A Searchpattern.
+	 * @param regex A search pattern.
 	 * @return A list of users matching.
 	 */
 	public List<IRCUser> searchUsersByNick(String regex) {
@@ -57,7 +57,7 @@ public class IRCUserCollection {
 	/**
 	 * Searches for all users and matches their user with the given pattern.
 	 * 
-	 * @param regex A Searchpattern.
+	 * @param regex A search pattern.
 	 * @return A list of users matching.
 	 */
 	public List<IRCUser> searchUsersByUser(String regex) {
@@ -72,9 +72,9 @@ public class IRCUserCollection {
 	}
 	
 	/**
-	 * Seaches for all users and matches their host with the given pattern.
+	 * Searches for all users and matches their host with the given pattern.
 	 * 
-	 * @param regex A Searchpattern.
+	 * @param regex A search pattern.
 	 * @return A list of users matching.
 	 */
 	public List<IRCUser> searchUsersByHost(String regex) {
@@ -98,14 +98,20 @@ public class IRCUserCollection {
 		if (user == null || users.contains(user)) 
 			return;
 		
+		//Remove users with the same nick.
+		List<IRCUser> foundUsers = searchUsersByNick(user.getNick());
+		for (IRCUser u : foundUsers) {
+			removeUser(u);
+		}
+		
 		users.add(user);
 	}
 	
 	/**
-	 * Removes a user from the colletion.
+	 * Removes a user from the collection.
 	 * 
 	 * @param user The {@link IRCUser} to remove.
-	 * @return true on succes, false otherwise.
+	 * @return true on success, false otherwise.
 	 */
 	public boolean removeUser(IRCUser user) {
 		return users.remove(user);
