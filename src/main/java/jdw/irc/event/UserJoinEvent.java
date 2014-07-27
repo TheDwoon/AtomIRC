@@ -7,7 +7,7 @@ import jdw.irc.IRCUser;
 /**
  * Fired when a user enters a channel.
  * 
- * @author Daniel
+ * @author TheDwoon
  *
  */
 public class UserJoinEvent extends IRCEvent {

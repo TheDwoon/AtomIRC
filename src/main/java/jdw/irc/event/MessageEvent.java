@@ -5,9 +5,9 @@ import jdw.irc.IRCClient;
 import jdw.irc.IRCUser;
 
 /**
- * Fired when you recieve a message.
+ * Fired when you receive a message.
  * 
- * @author Daniel
+ * @author TheDwoon
  *
  */
 public class MessageEvent extends IRCEvent {

@@ -3,9 +3,9 @@ package jdw.irc.event;
 import jdw.irc.IRCClient;
 
 /**
- * Fired, when a ping is recieved from the IRCServer.
+ * Fired, when a ping is received from the IRCServer.
  * 
- * @author Daniel
+ * @author TheDwoon
  *
  */
 public class PingEvent extends IRCEvent {

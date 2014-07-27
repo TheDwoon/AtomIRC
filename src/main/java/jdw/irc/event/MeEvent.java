@@ -6,7 +6,7 @@ import jdw.irc.IRCUser;
 /**
  * Fired if someone uses /me.
  * 
- * @author Daniel
+ * @author TheDwoon
  *
  */
 public class MeEvent extends IRCEvent {
