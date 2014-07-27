@@ -2,13 +2,10 @@ package jdw.irc;
 
 import static jdw.irc.event.NumericResponseEvent.*;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.Observable;
 import java.util.Observer;
-import java.util.logging.FileHandler;
-import java.util.logging.Logger;
 
 import jdw.event.EventDispatcher;
 import jdw.event.SyncQueueEventDispatcher;
@@ -33,46 +30,45 @@ import jdw.irc.net.command.irc.PrivateMessageExecutor;
 import jdw.irc.net.command.irc.QuitExecutor;
 import jdw.irc.net.command.irc.ResponseManager;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 /**
  * 
  * 
  * @author TheDwoon
  *
  */
-public class IRCClient implements Observer {
+public class IRCClient implements Observer {	
 	public static final String VERSION_NAME = "AtomIRC-Core";
 	public static final String VERSION = "0.3.2";
 	public static final String CREATOR = "TheDwoon";
-			
-	public static final File logFile = new File("irc-core.log");
-	public static final Logger logger = Logger.getLogger("irc-core");
 	
-	public static boolean DEBUG = false;
+	private static final Logger LOG = LogManager.getLogger();
 	
-	static {
-		try {
-			logger.addHandler(new FileHandler(logFile.getAbsolutePath(), true));
-		} catch (SecurityException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	private final Connection connection;
+	private Connection connection;
 	
 	private EventDispatcher evtDispatcher;
 	
 	private ResponseManager cmdMgr;	
 	private ResponseManager ctcpMgr;
+	//FIXME: Remove the channelMgr.
 	private IRCChannelManager channelMgr;
-	private IRCUserManager userMgr;
 	
+	private final String host;
+	private final int port;
+	
+	private String nick;
+	private String user;
 	private String password;
-	private IRCUser me;
 	
-	private IRCClient(Connection connection) {
-		this.connection = connection;		
+	private IRCClient(String host, int port, String nick, String user, String password) {
+		this.host = host;
+		this.port = port;
+		
+		this.nick = nick;
+		this.user = user;
+		this.password = password;
 		
 		this.evtDispatcher = new SyncQueueEventDispatcher();
 		((SyncQueueEventDispatcher) this.evtDispatcher).start();
@@ -80,7 +76,6 @@ public class IRCClient implements Observer {
 		this.ctcpMgr = new ResponseManager();
 		this.cmdMgr = new ResponseManager();
 		this.channelMgr = new IRCChannelManager();
-		this.userMgr = new IRCUserManager();
 				
 		initCmdMgr();
 		initCtcpMgr();
@@ -236,32 +231,28 @@ public class IRCClient implements Observer {
 		cmdMgr.setExecutor(RPL_ADMINEMAIL , new NumericExecutor(this, RPL_ADMINEMAIL));
 	}
 	
-	public static IRCClient connect(String host, int port, String nick, String password, String identity) throws UnknownHostException, IOException {
-		Connection connection = Connection.connect(host, port);
+	public static IRCClient connect(String host, int port, String nick, String password, String identity) throws UnknownHostException, IOException {	
+		IRCClient client = new IRCClient(host, port, nick, identity, password);
 				
-		IRCClient client = new IRCClient(connection);
-				
-		client.connect(nick, identity, password);
+		client.connect();
 		
 		return client;
 	}
 	
-	private void connect(String nick, String user, String password) throws IOException {
+	private void connect() throws IOException {
 		/*
 		 * Direktes Senden um keine reconnect Events auszulösen.
 		 * Denn falls das passiert versucht er die Verbindung neu aufzubauen und dann
 		 * verwendet er dummerweiße diese Methode...
 		 */
 		
-		this.password = password;
+		connection = Connection.connect(host, port);
 		
 		if (password != null && !password.isEmpty())
 			connection.sendObject("PASS " + password);
 		
 		connection.sendObject("NICK " + nick);
 		connection.sendObject("USER " + user + " SERVER SERVER :Max Mustermann");
-		
-		me = getUserManager().getUserFromString(nick);
 	}
 	
 	/**
@@ -287,7 +278,7 @@ public class IRCClient implements Observer {
 	
 	/**
 	 * Sends the "AUTH" Command.
-	 * This should verfify a user for the server.
+	 * This should verify a user for the server.
 	 * It won't be send if one ore both arguments are empty or null.
 	 * 
 	 * @param user The User.
@@ -383,33 +374,38 @@ public class IRCClient implements Observer {
 		return sendObject("PONG " + timestamp);		
 	}
 	
-	protected synchronized boolean sendObject(Object o) {		
+	protected synchronized boolean sendObject(Object o) {	
+		if (o == null) {
+			return true;
+		}
+		
 		for (int i = 0; true; i++) {
 			try {				
 				connection.sendObject(o);
-//				logger.info("Successfully transmitted: " + o);
+				LOG.trace("Packet send: \"" + o + "\"");
 				return true;
-			} catch (IOException e) {	
-				/*
-				 * Der Fehlschlag wird in das Log geschrieben und anschließend per Event gefragt ob er sich neu verbinden soll.
-				 * Bei den ersten 3 Versuchen ist der Standartwert reconnect. Der Nutzer kann es aber ändern.
-				 */
-				logger.info("Sending of \"" + o + "\" failed at attempt " + i + ". Caused by " + e);
+			} catch (IOException e) {
+				LOG.info("Sending of \"" + o + "\" failed at attempt " + i + ". Caused by " + e);
 				ConnectionLostEvent event = new ConnectionLostEvent(this, (i < 3) ? true : false, i);
 				
 				getEventSystem().dispatchEvent(event);
 				
 				if (event.shouldReconnect()) {
 					if (connection.isConnected()) {
-						logger.info("Connection seems to be ok!");
-					} else {
+						LOG.info("Connection seems to be ok! Reconnection any way...");
+					} 
+					
+					try {
 						try {
-							connection.reconnect();	
-							connect(me.getNick(), me.getUser(), password);
-						} catch (IOException e1) {							
-							logger.warning("Reconnecting to " + connection.getHost() + ":" + connection.getPort() + " failed!");
+							connection.close();
+						} catch (IOException e2) {
+							LOG.warn("Failed to close old connection!");
 						}
-					}
+						
+						connect(host, port, nick, user, password);
+					} catch (IOException e1) {							
+						LOG.warn("Reconnecting to " + host + ":" + port + " failed!");
+					}					
 				} else {
 					return false;
 				}
@@ -445,12 +441,12 @@ public class IRCClient implements Observer {
 		return true;
 	}
 
-	public IRCUser getMe() {
-		return me;
+	public String getNick() {
+		return nick;
 	}
 	
-	public IRCUserManager getUserManager() {
-		return userMgr;
+	public String getUser() {
+		return user;
 	}
 	
 	public ResponseManager getResponseManager() {
@@ -471,7 +467,7 @@ public class IRCClient implements Observer {
 	
 	@Override
 	public void update(Observable o, Object arg) {
-		//TODO: Hide this part from the user of this.
+		//FIXME: Hide this part from the user of this.
 		/*
 		 * Update from the connection to the server.
 		 * This should try to execute them.

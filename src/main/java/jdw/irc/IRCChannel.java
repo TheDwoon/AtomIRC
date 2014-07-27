@@ -26,7 +26,7 @@ public class IRCChannel extends IRCUserCollection {
 	}
 	
 	/**
-	 * Mathes the channels name against the given pattern.
+	 * Matches the channels name against the given pattern.
 	 *  
 	 * @param regex A pattern to match with.
 	 * @return true if it matches, false otherwise.

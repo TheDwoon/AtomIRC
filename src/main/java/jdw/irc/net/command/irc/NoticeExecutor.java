@@ -14,7 +14,7 @@ public class NoticeExecutor implements ResponseExecutor {
 	
 	@Override
 	public void executeResponse(Response r) {
-		IRCUser user = client.getUserManager().getUserFromString(r.getArgs()[0]);
+		IRCUser user = IRCUser.parseFromString(r.getArgs()[0]);
 		String message = r.getTrailing();
 		
 		NoticeEvent event = new NoticeEvent(client, user, message);

@@ -34,6 +34,6 @@ public class NamReplyExecutor extends NumericExecutor {
 			userString = userString.substring(1);
 		}
 		
-		return getClient().getUserManager().getUserFromString(userString);		
+		return IRCUser.parseFromString(userString);		
 	}
 }

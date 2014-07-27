@@ -15,7 +15,7 @@ public class ModeExecutor implements ResponseExecutor {
 	
 	@Override
 	public void executeResponse(Response r) {
-		IRCUser sender = client.getUserManager().getUserFromString(r.getPrefix());		
+		IRCUser sender = IRCUser.parseFromString(r.getPrefix());		
 		
 		IRCChannel channel = null;
 		IRCUser user = null;
@@ -23,13 +23,13 @@ public class ModeExecutor implements ResponseExecutor {
 		
 		switch (r.getArgs().length) {
 		case 2:
-			user = client.getUserManager().getUserFromString(r.getArgs()[0]);
+			user = IRCUser.parseFromString(r.getArgs()[0]);
 			mode = r.getArgs()[1];
 			break;
 		case 3:
 			channel = client.getChannelManager().getChannelByName(r.getArgs()[0]);
 			mode = r.getArgs()[1];
-			user = client.getUserManager().getUserFromString(r.getArgs()[2]);
+			user = IRCUser.parseFromString(r.getArgs()[2]);
 			break;
 		default:			
 			break;

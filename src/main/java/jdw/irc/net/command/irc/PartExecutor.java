@@ -15,7 +15,7 @@ public class PartExecutor implements ResponseExecutor {
 	
 	@Override
 	public void executeResponse(Response r) {
-		IRCUser user = client.getUserManager().getUserFromString(r.getPrefix());
+		IRCUser user = IRCUser.parseFromString(r.getPrefix());
 		IRCChannel channel = client.getChannelManager().getChannelByName(r.getArgs()[0]);
 		
 		channel.removeUser(user);

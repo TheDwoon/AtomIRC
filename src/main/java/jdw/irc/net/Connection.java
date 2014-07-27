@@ -12,16 +12,16 @@ import java.util.logging.Logger;
 
 import javax.net.ssl.SSLSocketFactory;
 
+//FIXME: Remove observer pattern.
 public class Connection extends Observable {	
 	private final String host;
 	private final int port;
 	
-	private EncryptionMethod encryption;
 	
-	private Socket socket;
-	
-	private BufferedWriter output;
-	private BufferedReader input;
+	private final Socket socket;	
+	private final EncryptionMethod encryption;
+	private final BufferedWriter output;
+	private final BufferedReader input;
 	
 	private Listener listener;
 	
@@ -30,22 +30,7 @@ public class Connection extends Observable {
 		this.port = port;
 		
 		this.encryption = encryption;
-		this.socket = null;
-		this.input = null;
-		this.output = null;
-		this.listener = null;
 		
-		connect();
-	}	
-		
-	public static Connection connect(String host, int port) throws UnknownHostException, IOException {
-		return new Connection(host, port, EncryptionMethod.NONE);
-	}
-	
-	public void connect() throws UnknownHostException, IOException {
-		if (socket != null)
-			return;
-				
 		switch (encryption) {
 			case NONE:
 				socket = new Socket(getHost(), getPort());
@@ -56,12 +41,17 @@ public class Connection extends Observable {
 			default:
 				throw new IllegalArgumentException("Unsupported Encryption!");
 		}
+		
 		output = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream(), "UTF-8"));
 		input = new BufferedReader(new InputStreamReader(socket.getInputStream(), "UTF-8"));
 		
 		listener = new Listener();
+	}	
+		
+	public static Connection connect(String host, int port) throws UnknownHostException, IOException {
+		return new Connection(host, port, EncryptionMethod.NONE);
 	}
-	
+		
 	public void sendObject(Object o) throws IOException {
 		if (o == null) 
 			return;
@@ -74,11 +64,6 @@ public class Connection extends Observable {
 	public String recieveObject() throws IOException {				
 		return input.readLine();						
 	}
-
-	public void reconnect() throws IOException {
-		close();
-		connect();
-	}
 	
 	public boolean isConnected() {
 		return socket.isConnected() && !socket.isClosed();
@@ -87,19 +72,12 @@ public class Connection extends Observable {
 	public void close() throws IOException {
 		if (listener != null)
 			listener.interrupt();
-		listener = null;
-		
 		if (input != null) 
 			input.close();
-		input = null;
-		
 		if (output != null)
 			output.close();
-		output = null;
-		
 		if (socket != null)
 			socket.close();		
-		socket = null;
 	}
 	
 	public Socket getSocket() {
@@ -114,6 +92,10 @@ public class Connection extends Observable {
 		return port;
 	}
 
+	public EncryptionMethod getEncryptionMethod() {
+		return encryption;
+	}
+	
 	private class Listener extends Thread {		
 		private Listener() {
 			setName("Listener for " + host + ":" + port);

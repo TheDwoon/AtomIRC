@@ -4,43 +4,47 @@ package jdw.irc;
  * Represents a user.
  * Each user could have a nick, user and a host.
  * 
- * @author daniel
+ * @author TheDwoon
  *
  */
 public class IRCUser {
+	//FIXME: Make these parts final.
 	private String nick;	
 	private String user;
 	private String host;
 	
-	protected static IRCUser parseFromString(String token) {
-		IRCUser user = new IRCUser();
+	public static IRCUser parseFromString(String token) {
+		String nick = null;
+		String user = null;
+		String host = null;
 		
 		int indexNick = token.indexOf("!");				
 		if (indexNick != -1) {
-			user.setNick(token.substring(0, indexNick));
+			nick = token.substring(0, indexNick);
 			token = token.substring(indexNick + 1); 
 		}
 		
 		int indexUser = token.indexOf("@");
 		if (indexUser != -1) {
-			user.setUser(token.substring(0, indexUser));
+			user = token.substring(0, indexUser);
 			token = token.substring(indexUser + 1);
 		}
 		
 		if (indexUser == -1 && indexNick == -1) {
 			//No ! and @ in that string. Just take it as the nick.
-			user.setNick(token);			
+			nick = token;			
 		} else {		
-			user.setHost(token);
+			host = token;
 		}
-		return user;		
+		
+		return new IRCUser(nick, user, host);		
 	}
 	
 	/**
-	 * Creates a new user with no nick(null), no user(null) and no host(null).
+	 * Creates a new user with no user (null) and no host (null).
 	 */
-	protected IRCUser() {
-		this(null, null, null);
+	public IRCUser(String nick) {
+		this(nick, null, null);
 	}
 	
 	/**
@@ -50,8 +54,8 @@ public class IRCUser {
 	 * @param user Its user.
 	 * @param host Its host.
 	 */
-	protected IRCUser(String nick, String user, String host) {
-		this.nick = nick;
+	public IRCUser(String nick, String user, String host) {	
+		this.nick = nick;		
 		this.user = user;
 		this.host = host;
 	}
@@ -132,11 +136,17 @@ public class IRCUser {
 	}
 	
 	/**
-	 * Changes the nick.
+	 * Changes the nick. You are not allowed to set 
+	 * nick to null or an empty value. Every user 
+	 * MUST HAVE a valid nick.
 	 * 
 	 * @param nick New nick.
 	 */
 	public void setNick(String nick) {
+		if (nick == null || nick.isEmpty()) {
+			throw new IllegalArgumentException("nick was null empty.");
+		}
+		
 		this.nick = nick;
 	}
 	

@@ -14,7 +14,7 @@ public class NickExecutor implements ResponseExecutor {
 	
 	@Override
 	public void executeResponse(Response r) {
-		IRCUser user = client.getUserManager().getUserFromString(r.getPrefix());
+		IRCUser user = IRCUser.parseFromString(r.getPrefix());
 		
 		String oldNick = user.getNick();
 		String newNick = r.getTrailing();

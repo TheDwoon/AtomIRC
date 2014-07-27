@@ -14,7 +14,7 @@ public class QuitExecutor implements ResponseExecutor {
 	
 	@Override
 	public void executeResponse(Response r) {
-		IRCUser user = client.getUserManager().getUserFromString(r.getPrefix());
+		IRCUser user = IRCUser.parseFromString(r.getPrefix());
 		String message = r.getTrailing();
 		
 		client.getChannelManager().removeUserFromAllChannels(user);
