@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * A collection of IRCUsers.
  * 
- * @author daniel
+ * @author TheDwoon
  */
 public class IRCUserCollection {
 	protected final List<IRCUser> users;

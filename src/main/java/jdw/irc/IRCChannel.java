@@ -3,7 +3,7 @@ package jdw.irc;
 /**
  * Represents a Channel.
  * 
- * @author daniel
+ * @author TheDwoon
  *
  */
 public class IRCChannel extends IRCUserCollection {

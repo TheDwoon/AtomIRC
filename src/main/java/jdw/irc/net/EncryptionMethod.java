@@ -3,7 +3,7 @@ package jdw.irc.net;
 /**
  * Supported encryptions for the {@link Connection}.
  * 
- * @author daniel
+ * @author TheDwoon
  *
  */
 public enum EncryptionMethod {

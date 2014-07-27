@@ -36,7 +36,7 @@ import jdw.irc.net.command.irc.ResponseManager;
 /**
  * 
  * 
- * @author Daniel
+ * @author TheDwoon
  *
  */
 public class IRCClient implements Observer {

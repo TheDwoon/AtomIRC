@@ -6,7 +6,7 @@ import jdw.irc.IRCClient;
 /**
  * The Default {@link IRCEvent}.
  * 
- * @author Daniel
+ * @author TheDwoon
  *
  */
 public abstract class IRCEvent implements Event {

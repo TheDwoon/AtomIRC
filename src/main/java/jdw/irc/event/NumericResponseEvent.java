@@ -5,7 +5,7 @@ import jdw.irc.IRCClient;
 /**
  * Fired, when the server replies with an numeric response.
  * 
- * @author Daniel
+ * @author TheDwoon
  *
  */
 public class NumericResponseEvent extends IRCEvent {

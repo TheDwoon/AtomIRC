@@ -7,7 +7,7 @@ import jdw.irc.IRCUser;
 /**
  * Fired when a users mode is changed.
  * 
- * @author Daniel
+ * @author TheDwoon
  *
  */
 public class ModeChangeEvent extends IRCEvent {

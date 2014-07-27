@@ -6,7 +6,7 @@ import jdw.irc.IRCUser;
 /**
  * Fired when the client get noticed by someone.
  * 
- * @author Daniel
+ * @author TheDwoon
  *
  */
 public class NoticeEvent extends IRCEvent {

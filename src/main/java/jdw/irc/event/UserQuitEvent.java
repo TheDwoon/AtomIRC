@@ -6,7 +6,7 @@ import jdw.irc.IRCUser;
 /**
  * Called when a user quits the IRC Server.
  * 
- * @author Daniel
+ * @author TheDwoon
  *
  */
 public class UserQuitEvent extends IRCEvent {

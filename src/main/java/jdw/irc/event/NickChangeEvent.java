@@ -6,7 +6,7 @@ import jdw.irc.IRCUser;
 /**
  * Fired when a user changed his nick.
  * 
- * @author Daniel
+ * @author TheDwoon
  *
  */
 public class NickChangeEvent extends IRCEvent {

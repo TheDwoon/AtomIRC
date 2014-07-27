@@ -6,7 +6,7 @@ import jdw.irc.net.Response;
 /**
  * Fired when the command cannot be identified by the RFC, CTCP Protocol.
  * 
- * @author Daniel
+ * @author TheDwoon
  *
  */
 public class UnknownCommandEvent extends IRCEvent {

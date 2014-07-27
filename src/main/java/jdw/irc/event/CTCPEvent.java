@@ -6,7 +6,7 @@ import jdw.irc.IRCUser;
 /**
  * Fired when you get a ctpc based message from another client.
  * 
- * @author Daniel
+ * @author TheDwoon
  *
  */
 public class CTCPEvent extends IRCEvent {

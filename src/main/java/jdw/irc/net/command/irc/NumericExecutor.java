@@ -7,7 +7,7 @@ import jdw.irc.net.Response;
 /**
  * A basic executor for the numeric responses. Mainly raising the events.
  * 
- * @author Daniel
+ * @author TheDwoon
  *
  */
 public class NumericExecutor implements ResponseExecutor {
