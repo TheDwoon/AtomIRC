@@ -6,7 +6,7 @@ package jdw.irc;
  * @author TheDwoon
  *
  */
-public class IRCChannel extends IRCUserCollection {
+public final class IRCChannel extends IRCUserCollection {
 	private final String name;	
 	
 	/**

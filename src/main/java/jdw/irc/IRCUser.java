@@ -7,11 +7,10 @@ package jdw.irc;
  * @author TheDwoon
  *
  */
-public class IRCUser {
-	//FIXME: Make these parts final.
-	private String nick;	
-	private String user;
-	private String host;
+public final class IRCUser {
+	private final String nick;	
+	private final String user;
+	private final String host;
 	
 	public static IRCUser parseFromString(String token) {
 		String nick = null;
@@ -134,53 +133,20 @@ public class IRCUser {
 	public String getNick() {
 		return nick;
 	}
-	
-	/**
-	 * Changes the nick. You are not allowed to set 
-	 * nick to null or an empty value. Every user 
-	 * MUST HAVE a valid nick.
-	 * 
-	 * @param nick New nick.
-	 */
-	public void setNick(String nick) {
-		if (nick == null || nick.isEmpty()) {
-			throw new IllegalArgumentException("nick was null empty.");
-		}
 		
-		this.nick = nick;
-	}
-	
 	/**
 	 * @return The user.
 	 */
 	public String getUser() {
 		return user;
 	}
-	
-	/**
-	 * Changes the user.
-	 * 
-	 * @param user New user.
-	 */
-	public void setUser(String user) {
-		this.user = user;
-	}
-	
+		
 	/**
 	 * @return The host.
 	 */
 	public String getHost() {
 		return host;
 	}
-	
-	/**
-	 * Changes the host.
-	 * 
-	 * @param host New host.
-	 */
-	public void setHost(String host) {
-		this.host = host;
-	}	
 	
 	@Override
 	public String toString() {
@@ -189,5 +155,45 @@ public class IRCUser {
 		builder.append(nick).append('!').append(user).append('@').append(host);
 		
 		return builder.toString();
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((host == null) ? 0 : host.hashCode());
+		result = prime * result + ((nick == null) ? 0 : nick.hashCode());
+		result = prime * result + ((user == null) ? 0 : user.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		
+		if (obj == null || obj.getClass() != getClass()) {
+			return false;
+		}
+		
+		IRCUser other = (IRCUser) obj;
+		if (nick == null) {
+			if (other.nick != null) {
+				return false;
+			}
+		} else if (!nick.equals(other.nick)) {
+			return false;
+		}
+		
+		if (user == null) {
+			if (other.user != null) {
+				return false;
+			}
+		} else if (!user.equals(other.user)) {
+			return false;
+		}
+		
+		return true;
 	}
 }

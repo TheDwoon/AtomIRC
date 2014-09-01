@@ -19,6 +19,8 @@ public class NickExecutor implements ResponseExecutor {
 		String oldNick = user.getNick();
 		String newNick = r.getTrailing();
 		
+		
+		//FIXME Fix this error.
 		user.setNick(newNick);
 
 		NickChangeEvent event = new NickChangeEvent(client, oldNick, user);

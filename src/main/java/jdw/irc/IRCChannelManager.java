@@ -3,7 +3,7 @@ package jdw.irc;
 import java.util.LinkedList;
 import java.util.List;
 
-public class IRCChannelManager {
+public final class IRCChannelManager {
 	private final List<IRCChannel> channels;
 	
 	public IRCChannelManager() {
