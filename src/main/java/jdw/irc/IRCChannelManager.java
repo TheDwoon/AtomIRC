@@ -1,5 +1,6 @@
 package jdw.irc;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -26,6 +27,10 @@ public final class IRCChannelManager {
 		}
 		
 		return null;
+	}
+	
+	public List<IRCChannel> getChannels() {
+		return new ArrayList<IRCChannel>(channels);
 	}
 	
 	public boolean containsChannel(String channelName) {

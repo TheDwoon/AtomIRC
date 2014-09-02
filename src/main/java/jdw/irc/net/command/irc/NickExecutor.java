@@ -1,5 +1,6 @@
 package jdw.irc.net.command.irc;
 
+import jdw.irc.IRCChannel;
 import jdw.irc.IRCClient;
 import jdw.irc.IRCUser;
 import jdw.irc.event.NickChangeEvent;
@@ -21,7 +22,10 @@ public class NickExecutor implements ResponseExecutor {
 		
 		
 		//FIXME Fix this error.
-		user.setNick(newNick);
+		for (IRCChannel channel : client.getChannelManager().getChannels()) {
+			channel.removeUser(user);
+			channel.addUser(new IRCUser(newNick, user.getUser(), user.getHost()));
+		}
 
 		NickChangeEvent event = new NickChangeEvent(client, oldNick, user);
 		client.getEventSystem().dispatchEvent(event);
