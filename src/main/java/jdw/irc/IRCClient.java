@@ -7,6 +7,9 @@ import java.net.UnknownHostException;
 import java.util.Observable;
 import java.util.Observer;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import jdw.event.EventDispatcher;
 import jdw.event.SyncQueueEventDispatcher;
 import jdw.irc.event.ConnectionLostEvent;
@@ -29,9 +32,6 @@ import jdw.irc.net.command.irc.PingExecutor;
 import jdw.irc.net.command.irc.PrivateMessageExecutor;
 import jdw.irc.net.command.irc.QuitExecutor;
 import jdw.irc.net.command.irc.ResponseManager;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 /**
  * 
@@ -71,8 +71,7 @@ public class IRCClient implements Observer {
 		this.password = password;
 		
 		this.evtDispatcher = new SyncQueueEventDispatcher();
-		((SyncQueueEventDispatcher) this.evtDispatcher).start();
-		
+
 		this.ctcpMgr = new ResponseManager();
 		this.cmdMgr = new ResponseManager();
 		this.channelMgr = new IRCChannelManager();
