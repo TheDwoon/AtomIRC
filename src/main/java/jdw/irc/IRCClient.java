@@ -77,10 +77,7 @@ public class IRCClient implements Observer {
 		this.channelMgr = new IRCChannelManager();
 				
 		initCmdMgr();
-		initCtcpMgr();
-		
-		connection.deleteObservers();
-		connection.addObserver(this);		
+		initCtcpMgr();	
 	}	
 	
 	private void initCtcpMgr() {
@@ -245,7 +242,12 @@ public class IRCClient implements Observer {
 		 * verwendet er dummerweiße diese Methode...
 		 */
 		
+		if (connection != null) {
+			connection.deleteObservers();
+		}
+
 		connection = Connection.connect(host, port);
+		connection.addObserver(this);	
 		
 		if (password != null && !password.isEmpty())
 			connection.sendObject("PASS " + password);
